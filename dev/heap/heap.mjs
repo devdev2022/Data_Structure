@@ -40,7 +40,7 @@ class Heap {
   }
 
   isBigPriority(first, second) {
-    return first < second;
+    return first.priority < second.priority;
   }
 
   getInsertingParent() {
@@ -198,15 +198,12 @@ class Heap {
   }
 }
 
-let heap = new Heap();
-heap.insert(4);
-heap.insert(2);
-heap.insert(5);
-heap.insert(7);
-heap.insert(1);
+class Person {
+  constructor(name, age) {
+    this.name = name;
+    this.age = age;
+    this.priority = age;
+  }
+}
 
-heap.root.inOrderTraversal(heap.root);
-console.log(heap.root);
-
-console.log("===== remove =====");
-console.log(heap.remove());
+export { Heap };
