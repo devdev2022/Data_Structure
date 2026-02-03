@@ -17,27 +17,51 @@ class Vertex {
   }
 }
 
-let jake = new Vertex("Jake");
+function DFS(vertex, visited_vertices = {}) {
+  visited_vertices[vertex.value] = true;
+
+  console.log(`정점 : ${vertex.value}`);
+
+  for (let adjacent of vertex.adjacent_vertices) {
+    if (visited_vertices[adjacent.value]) {
+      continue;
+    } else {
+      DFS(adjacent, visited_vertices);
+    }
+  }
+}
+
 let ben = new Vertex("Ben");
-let joy = new Vertex("Joy");
 let ivy = new Vertex("Ivy");
-let elin = new Vertex("Elin");
+let joy = new Vertex("Joy");
+let jake = new Vertex("Jake");
 let anna = new Vertex("Anna");
 let david = new Vertex("David");
+let elin = new Vertex("Elin");
+let owen = new Vertex("Owen");
+
+ben.addAdjacentVertex(ivy);
+ben.addAdjacentVertex(jake);
+ben.addAdjacentVertex(anna);
+ben.addAdjacentVertex(david);
+
+ivy.addAdjacentVertex(ben);
+ivy.addAdjacentVertex(joy);
+
+joy.addAdjacentVertex(ivy);
+joy.addAdjacentVertex(jake);
 
 jake.addAdjacentVertex(ben);
-ben.addAdjacentVertex(jake);
-joy.addAdjacentVertex(ben);
-joy.addAdjacentVertex(ivy);
-ivy.addAdjacentVertex(joy);
-ivy.addAdjacentVertex(ben);
-elin.addAdjacentVertex(ivy);
-elin.addAdjacentVertex(anna);
-anna.addAdjacentVertex(ben);
-anna.addAdjacentVertex(david);
-anna.addAdjacentVertex(elin);
-david.addAdjacentVertex(anna);
+jake.addAdjacentVertex(joy);
 
-console.log(anna.adjacent_vertices);
-anna.removeAdjacentVertex(david);
-console.log(anna.adjacent_vertices);
+anna.addAdjacentVertex(ben);
+
+david.addAdjacentVertex(ben);
+david.addAdjacentVertex(elin);
+
+elin.addAdjacentVertex(david);
+elin.addAdjacentVertex(owen);
+
+owen.addAdjacentVertex(elin);
+
+DFS(ben);
