@@ -36,10 +36,12 @@ class Dijkstra {
       return null;
     } else {
       for (let city_name in unvisited_cities) {
-        shortest_path_table[city_name] = Infinity;
+        //shortest_path_table[city_name] = Infinity;
+        shortest_path_table[city_name] = { distance: Infinity, city: null };
       }
     }
-    shortest_path_table[start_city.name] = 0;
+    //shortest_path_table[start_city.name] = 0;
+    shortest_path_table[start_city.name] = { distance: 0, city: null };
 
     while (Object.keys(unvisited_cities).length > 0) {
       let closest_city_name = null;
@@ -47,8 +49,8 @@ class Dijkstra {
       for (let city_name in unvisited_cities) {
         if (
           closest_city_name == null ||
-          shortest_path_table[city_name] <
-            shortest_path_table[closest_city_name]
+          shortest_path_table[city_name].distance <
+            shortest_path_table[closest_city_name].distance
         ) {
           closest_city_name = city_name;
         }
@@ -64,16 +66,41 @@ class Dijkstra {
         }
 
         let distance =
-          shortest_path_table[closest_city_name] + // 출발 도시에서 현재 도시까지 거리 +
+          shortest_path_table[closest_city_name].distance + // 출발 도시에서 현재 도시까지 거리 +
           visited_cities[closest_city_name].adjacent_cities[adjacent_city_name]; // 현재 도시에서 인접 도시까지 거리
 
-        if (shortest_path_table[adjacent_city_name] > distance) {
-          shortest_path_table[adjacent_city_name] = distance;
+        if (shortest_path_table[adjacent_city_name].distance > distance) {
+          shortest_path_table[adjacent_city_name].distance = distance;
+          shortest_path_table[adjacent_city_name].city =
+            visited_cities[closest_city_name];
         }
       }
     }
 
-    console.log(shortest_path_table);
+    let path_string = this.showShortestPathRecursively(
+      end_city.name,
+      shortest_path_table,
+    );
+    console.log(path_string);
+  }
+  showShortestPathRecursively(
+    destination_city_name,
+    shortest_path_table,
+    path_string = "",
+  ) {
+    if (shortest_path_table[destination_city_name].city == null) {
+      path_string += destination_city_name;
+      return path_string;
+    }
+
+    path_string = this.showShortestPathRecursively(
+      shortest_path_table[destination_city_name].city.name,
+      shortest_path_table,
+      path_string,
+    );
+
+    path_string += " -> " + destination_city_name;
+    return path_string;
   }
 }
 
